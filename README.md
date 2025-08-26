@@ -196,5 +196,5 @@ GET    /api/users/{user}/favorites/count     # Contar favoritos do usuário
 
 ## 👨‍💻 Autor
 
-Desenvolvido por **Caio Cesar Lorenzon Dias**  
+Desenvolvido por **Caio Dias**  
 🔗 [GitHub](https://github.com/CaioCLDias) • [LinkedIn](https://www.linkedin.com/in/caio-cesar-lorenzon-dias/)
