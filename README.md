@@ -53,16 +53,6 @@ Instale as dependências:
 ```bash
 composer install
 ```
-
-Configurações da aplicação:
-Gerar Chave:
-```bash
-./vendor/bin/sail artisan key:generate
-```
-Gerar JWT Secret:
-```bash
-./vendor/bin/sail artisan jwt:secret
-```
 ---
 
 ## 🐳 Executando com Docker (Sail)
@@ -72,7 +62,15 @@ Suba os containers:
 ```bash
 ./vendor/bin/sail up -d
 ```
-
+Configurações da aplicação:
+Gerar Chave:
+```bash
+./vendor/bin/sail artisan key:generate
+```
+Gerar JWT Secret:
+```bash
+./vendor/bin/sail artisan jwt:secret
+```
 Rode as migrations:
 
 ```bash
