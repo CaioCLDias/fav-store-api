@@ -1,14 +1,17 @@
-# FavStore API
+# 🛍️ FavStore API
 
 ![PHP](https://img.shields.io/badge/PHP-8.4-blue)
 ![Laravel](https://img.shields.io/badge/Laravel-12-red)
 ![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
-![Tests](https://github.com/seu-usuario/favstore-api/actions/workflows/tests.yml/badge.svg)
 
 API RESTful desenvolvida em **Laravel 12** com **PHP 8.4**, utilizando **JWT** para autenticação.  
 Este projeto implementa a funcionalidade de **produtos favoritos** dos usuários, integrando-se com sistemas externos.
 
 ---
+
+## 📋 Resumo do Projeto
+
+API backend completa para gerenciamento de produtos favoritos com foco na segurança e isolamento de dados por usuário. Desenvolvida seguindo as melhores práticas do Laravel com arquitetura limpa e escalável, integrando com a FakeStore API para consulta de produtos.
 
 ## 🚀 Tecnologias
 
@@ -25,6 +28,7 @@ Este projeto implementa a funcionalidade de **produtos favoritos** dos usuários
 
 - Docker e Docker Compose instalados
 - PHP >= 8.4 (caso não use Sail)
+- Git
 - Composer
 
 ---
@@ -44,18 +48,21 @@ Copie o arquivo de configuração:
 cp .env.example .env
 ```
 
-Gere a chave da aplicação:
-
-```bash
-./vendor/bin/sail artisan key:generate
-```
-
 Instale as dependências:
 
 ```bash
 composer install
 ```
 
+Configurações da aplicação:
+Gerar Chave:
+```bash
+./vendor/bin/sail artisan key:generate
+```
+Gerar JWT Secret:
+```bash
+./vendor/bin/sail artisan jwt:secret
+```
 ---
 
 ## 🐳 Executando com Docker (Sail)
@@ -108,7 +115,10 @@ Para rodar apenas um teste específico:
 ```bash
 ./vendor/bin/sail artisan test --filter=AuthTest
 ```
-
+Cobertura de Testes
+```bash
+./vendor/bin/sail artisan test --coverage
+```
 ---
 
 ## 📂 Estrutura do Projeto
@@ -133,11 +143,54 @@ tests/
 
 ## 📌 Endpoints principais
 
-- **POST** `/api/auth/register` – Registro de usuário  
-- **POST** `/api/auth/login` – Login  
-- **POST** `/api/auth/logout` – Logout  
-- **POST** `/api/auth/refresh` – Renovar token  
-- **GET** `/api/auth/me` – Perfil do usuário autenticado  
+### Autenticação
+
+```
+POST   /api/auth/register       # Registrar novo usuário
+POST   /api/auth/login          # Login
+GET    /api/auth/me             # Dados do usuário autenticado
+POST   /api/auth/logout         # Logout
+POST   /api/auth/refresh        # Refresh token
+```
+
+### Produtos (FakeStore API)
+
+```
+GET    /api/products            # Listar todos os produtos
+GET    /api/products/{id}       # Visualizar produto específico
+```
+
+### Favoritos do Usuário
+
+```
+GET    /api/my-favorites        # Listar meus produtos favoritos
+POST   /api/my-favorites        # Adicionar produto aos favoritos
+DELETE /api/my-favorites/{id}   # Remover produto dos favoritos
+GET    /api/my-favorites/{id}/check  # Verificar se produto é favorito
+GET    /api/my-favorites/count  # Contar produtos favoritos
+```
+
+### Gerenciamento de Usuários (Admin)
+
+```
+GET    /api/users               # Listar usuários
+POST   /api/users               # Criar usuário
+GET    /api/users/trashed       # Listar usuários removidos
+GET    /api/users/{id}          # Visualizar usuário específico
+PUT    /api/users/{id}          # Atualizar usuário
+DELETE /api/users/{id}          # Remover usuário
+POST   /api/users/{id}/restore  # Restaurar usuário
+```
+
+### Favoritos por Usuário (Admin)
+
+```
+GET    /api/users/{user}/favorites           # Listar favoritos do usuário
+POST   /api/users/{user}/favorites           # Adicionar favorito para usuário
+DELETE /api/users/{user}/favorites/{product} # Remover favorito do usuário
+GET    /api/users/{user}/favorites/{product}/check # Verificar favorito
+GET    /api/users/{user}/favorites/count     # Contar favoritos do usuário
+```
 
 ---
 
