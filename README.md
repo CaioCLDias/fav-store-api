@@ -192,9 +192,83 @@ GET    /api/users/{user}/favorites/{product}/check # Verificar favorito
 GET    /api/users/{user}/favorites/count     # Contar favoritos do usuário
 ```
 
----
-
 ## 👨‍💻 Autor
 
 Desenvolvido por **Caio Dias**  
-🔗 [GitHub](https://github.com/CaioCLDias) • [LinkedIn](https://www.linkedin.com/in/caio-cesar-lorenzon-dias/)
+🔗 [GitHub](https://github.com/CaioCLDias) • [LinkedIn](https://www.linkedin.com/in/caio-cesar-lorenzon-dias/) • [WebSite](https://caiocldias.github.io)
+
+---
+# Leia-me
+## 📦 Entrega do Desafio
+
+### Informações de Entrega
+
+Este projeto foi desenvolvido como parte do desafio técnico da aiqfome e deve ser entregue conforme as seguintes especificações:
+
+### Escolhas Técnicas e Justificativas
+
+#### Framework e Linguagem
+- **Laravel 12 + PHP 8.2**: Escolhido pela robustez, maturidade e excelente ecossistema para desenvolvimento de APIs RESTful
+- **Eloquent ORM**: Facilita o mapeamento objeto-relacional e operações de banco de dados
+- **Artisan CLI**: Agiliza tarefas de desenvolvimento e deployment
+
+#### Autenticação
+- **JWT (JSON Web Tokens)**: Implementado via `tymon/jwt-auth` para autenticação stateless, ideal para APIs
+- **Middleware personalizado**: Garante isolamento de dados por usuário
+
+#### Banco de Dados
+- **PostgreSQL**: Escolhido pela confiabilidade, performance, recursos avançados e por ser recomendado para o desafio
+- **Migrations e Seeders**: Versionamento do schema e dados de teste automatizados
+- **Soft Deletes**: Preserva integridade dos dados permitindo recuperação
+
+#### Integração Externa
+- **FakeStore API**: Integração com cache inteligente para otimizar performance
+- **Guzzle HTTP Client**: Cliente robusto para requisições HTTP com timeout e retry
+- **Cache configurável**: TTL ajustável para balancear performance e atualização de dados
+
+#### Documentação
+- **Swagger/OpenAPI**: Documentação automática da API via `darkaonline/l5-swagger`
+- **README detalhado**: Instruções completas de instalação e uso
+- **Comentários no código**: Documentação inline para facilitar manutenção
+
+#### Testes e Qualidade
+- **PHPUnit**: Framework de testes unitários e de integração
+- **Form Requests**: Validação centralizada e reutilizável
+- **API Resources**: Controle preciso da serialização de dados
+
+#### DevOps e Deployment
+- **Docker + Laravel Sail**: Ambiente de desenvolvimento consistente e isolado
+- **Docker Compose**: Orquestração de serviços (app, banco, cache)
+- **Variáveis de ambiente**: Configuração flexível para diferentes ambientes
+
+#### Arquitetura
+- **Repository Pattern**: Abstração da camada de dados
+- **Service Layer**: Lógica de negócio isolada dos controllers
+- **Dependency Injection**: Inversão de controle para melhor testabilidade
+- **RESTful Design**: Endpoints seguindo convenções REST
+
+### Diferenciais Implementados
+
+1. **Sistema de Permissões**: Usuários admin podem gerenciar favoritos de outros usuários
+2. **Cache Inteligente**: Otimização de requisições à FakeStore API
+3. **Soft Deletes**: Usuários podem ser removidos logicamente
+4. **Rate Limiting**: Proteção contra abuso da API externa
+5. **Documentação Swagger**: Interface interativa para testes
+6. **Testes Automatizados**: Cobertura de cenários críticos
+7. **Containerização Completa**: Ambiente reproduzível em qualquer máquina
+
+### Possiveis Melhorias Futuras
+
+- Implementação de Redis para cache distribuído
+- Sistema de logs estruturados com ELK Stack
+- CI/CD com GitHub Actions
+- Monitoramento com Prometheus/Grafana
+- Implementação de WebSockets para atualizações em tempo real
+- Sistema de notificações por email
+- Versionamento da API (v1, v2, etc.)
+
+---
+
+**Desenvolvido por Caio Dias para o desafio técnico aiqfome** 
+
+
