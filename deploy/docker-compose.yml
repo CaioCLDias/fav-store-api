@@ -3,12 +3,12 @@ version: '3.8'
 services:
   laravel:
     build:
-      context: ../../
+      context: ..               
       dockerfile: deploy/Dockerfile
-    container_name: fav-store-api   
+    container_name: fav-store-api
     restart: always
     volumes:
-      - ../../deploy/start.sh:/usr/local/bin/start.sh:ro
+      - ./start.sh:/usr/local/bin/start.sh:ro   
     working_dir: /var/www/html
     command: ["sh", "/usr/local/bin/start.sh"]
     environment:
