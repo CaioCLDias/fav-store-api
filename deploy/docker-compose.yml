@@ -19,7 +19,7 @@ services:
       DB_PORT: "5432"
       DB_DATABASE: ${DB_DATABASE:-fav_store}
       DB_USERNAME: ${DB_USERNAME:-admin}
-      DB_PASSWORD: ${DB_PASSWORD:-troque-isto}
+      DB_PASSWORD: '${DB_PASSWORD:-secret}'
     ports:
       - "8005:9000"
     networks:
