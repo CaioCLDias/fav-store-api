@@ -3,23 +3,24 @@ version: '3.8'
 services:
   laravel:
     build:
-      context: ..               
+      context: ..
       dockerfile: deploy/Dockerfile
     container_name: fav-store-api
     restart: always
     volumes:
-      - ./start.sh:/usr/local/bin/start.sh:ro   
+      - ./start.sh:/usr/local/bin/start.sh:ro
     working_dir: /var/www/html
     command: ["sh", "/usr/local/bin/start.sh"]
     environment:
       TZ: America/Sao_Paulo
-      APP_ENV: production
-      DB_CONNECTION: pgsql
-      DB_HOST: pg_db          
-      DB_PORT: "5432"
-      DB_DATABASE: ${DB_DATABASE:-fav_store}
-      DB_USERNAME: ${DB_USERNAME:-admin}
-      DB_PASSWORD: '${DB_PASSWORD:-secret}'
+      APP_ENV: ${APP_ENV}
+      APP_URL: $APP_URL}
+      DB_CONNECTION: ${DB_CONNECTION}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
     ports:
       - "8005:9000"
     networks:
