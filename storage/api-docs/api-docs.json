@@ -172,30 +172,16 @@
                 ]
             }
         },
-        "/api/users/{user}/favorites": {
+        "/api/my-favorites": {
             "get": {
                 "tags": [
-                    "Favoritos"
+                    "Meus Favoritos"
                 ],
-                "summary": "Listar produtos favoritos de um usuário",
-                "operationId": "c82ef4a329c61aad5a12ae0248de5ce8",
-                "parameters": [
-                    {
-                        "name": "user",
-                        "in": "path",
-                        "description": "ID do usuário",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    }
-                ],
+                "summary": "Listar favoritos do usuário autenticado",
+                "operationId": "getMyFavorites",
                 "responses": {
                     "200": {
-                        "description": "Lista de favoritos retornada com sucesso"
-                    },
-                    "401": {
-                        "description": "Não autorizado"
+                        "description": "Produtos favoritos listados com sucesso"
                     }
                 },
                 "security": [
@@ -206,15 +192,79 @@
             },
             "post": {
                 "tags": [
-                    "Favoritos"
+                    "Meus Favoritos"
                 ],
-                "summary": "Adicionar produto aos favoritos do usuário",
-                "operationId": "80b723d0c22f0be7f59eb529ed1f16c5",
+                "summary": "Adicionar produto aos favoritos do usuário autenticado",
+                "operationId": "addMyFavorite",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "product_id"
+                                ],
+                                "properties": {
+                                    "product_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Produto adicionado aos favoritos"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{user}/favorites": {
+            "get": {
+                "tags": [
+                    "Favoritos de Usuário"
+                ],
+                "summary": "Listar favoritos de um usuário (admin)",
+                "operationId": "getUserFavorites",
                 "parameters": [
                     {
                         "name": "user",
                         "in": "path",
-                        "description": "ID do usuário",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produtos favoritos listados com sucesso"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Favoritos de Usuário"
+                ],
+                "summary": "Adicionar produto aos favoritos de um usuário (admin)",
+                "operationId": "addUserFavorite",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "path",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -243,9 +293,35 @@
                 "responses": {
                     "201": {
                         "description": "Produto adicionado aos favoritos"
-                    },
-                    "401": {
-                        "description": "Não autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/my-favorites/{product}": {
+            "delete": {
+                "tags": [
+                    "Meus Favoritos"
+                ],
+                "summary": "Remover produto dos favoritos do usuário autenticado",
+                "operationId": "removeMyFavorite",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Produto removido dos favoritos"
                     }
                 },
                 "security": [
@@ -258,15 +334,14 @@
         "/api/users/{user}/favorites/{product}": {
             "delete": {
                 "tags": [
-                    "Favoritos"
+                    "Favoritos de Usuário"
                 ],
-                "summary": "Remover produto dos favoritos do usuário",
-                "operationId": "79518b8f7153caad26653b43e63571b0",
+                "summary": "Remover produto dos favoritos de um usuário (admin)",
+                "operationId": "removeUserFavorite",
                 "parameters": [
                     {
                         "name": "user",
                         "in": "path",
-                        "description": "ID do usuário",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -275,7 +350,6 @@
                     {
                         "name": "product",
                         "in": "path",
-                        "description": "ID do produto",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -285,9 +359,35 @@
                 "responses": {
                     "200": {
                         "description": "Produto removido dos favoritos"
-                    },
-                    "401": {
-                        "description": "Não autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/my-favorites/{product}/check": {
+            "get": {
+                "tags": [
+                    "Meus Favoritos"
+                ],
+                "summary": "Checar se produto está nos favoritos do usuário autenticado",
+                "operationId": "checkMyFavorite",
+                "parameters": [
+                    {
+                        "name": "product",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Status do favorito retornado"
                     }
                 },
                 "security": [
@@ -300,15 +400,14 @@
         "/api/users/{user}/favorites/{product}/check": {
             "get": {
                 "tags": [
-                    "Favoritos"
+                    "Favoritos de Usuário"
                 ],
-                "summary": "Checar se produto está nos favoritos do usuário",
-                "operationId": "54f57edcf70ad15d430ce55fa69183d3",
+                "summary": "Checar se produto está nos favoritos de um usuário (admin)",
+                "operationId": "checkUserFavorite",
                 "parameters": [
                     {
                         "name": "user",
                         "in": "path",
-                        "description": "ID do usuário",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -317,7 +416,6 @@
                     {
                         "name": "product",
                         "in": "path",
-                        "description": "ID do produto",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -327,9 +425,25 @@
                 "responses": {
                     "200": {
                         "description": "Status do favorito retornado"
-                    },
-                    "401": {
-                        "description": "Não autorizado"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/my-favorites/count": {
+            "get": {
+                "tags": [
+                    "Meus Favoritos"
+                ],
+                "summary": "Contar produtos favoritos do usuário autenticado",
+                "operationId": "countMyFavorites",
+                "responses": {
+                    "200": {
+                        "description": "Contagem de favoritos retornada"
                     }
                 },
                 "security": [
@@ -342,15 +456,14 @@
         "/api/users/{user}/favorites/count": {
             "get": {
                 "tags": [
-                    "Favoritos"
+                    "Favoritos de Usuário"
                 ],
-                "summary": "Contar produtos favoritos do usuário",
-                "operationId": "fcf07dd89db8d40ef9bce2f4cd5cd00f",
+                "summary": "Contar produtos favoritos de um usuário (admin)",
+                "operationId": "countUserFavorites",
                 "parameters": [
                     {
                         "name": "user",
                         "in": "path",
-                        "description": "ID do usuário",
                         "required": true,
                         "schema": {
                             "type": "integer"
@@ -360,9 +473,6 @@
                 "responses": {
                     "200": {
                         "description": "Contagem de favoritos retornada"
-                    },
-                    "401": {
-                        "description": "Não autorizado"
                     }
                 },
                 "security": [
@@ -754,8 +864,12 @@
             "description": "Gerenciamento de autenticação de usuários"
         },
         {
-            "name": "Favoritos",
-            "description": "Gerenciamento de produtos favoritos dos usuários"
+            "name": "Meus Favoritos",
+            "description": "Gerenciamento dos favoritos do usuário autenticado"
+        },
+        {
+            "name": "Favoritos de Usuário",
+            "description": "Gerenciamento dos favoritos de usuários (admin)"
         },
         {
             "name": "Produtos",

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\FavoriteProduct\AddFavoriteRequest;
 use App\Http\Resources\FavoriteProductResource;
-use App\Http\Resources\ProductResource;
 use App\Http\Responses\ApiResponse;
 use App\Http\Services\FakeStoreApiService;
 use App\Http\Services\FavoriteProductService;
@@ -15,33 +14,20 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-
 /**
- * @OA\Get(
- *     path="/api/my-favorites",
- *     summary="Listar favoritos do usuário autenticado",
- *     tags={"Meus Favoritos"},
- *     security={{"bearerAuth":{}}},
- *     @OA\Response(...)
+ * @OA\Tag(
+ *     name="Meus Favoritos",
+ *     description="Gerenciamento dos favoritos do usuário autenticado"
  * )
- *
- * @OA\Get(
- *     path="/api/users/{user}/favorites",
- *     summary="Listar favoritos de um usuário (admin)",
- *     tags={"Favoritos de Usuário"},
- *     security={{"bearerAuth":{}}},
- *     @OA\Parameter(
- *         name="user",
- *         in="path",
- *         required=true,
- *         @OA\Schema(type="integer")
- *     ),
- *     @OA\Response(...)
+ * @OA\Tag(
+ *     name="Favoritos de Usuário",
+ *     description="Gerenciamento dos favoritos de usuários (admin)"
  * )
  */
 class FavorityController extends Controller
 {
     use AuthorizesRequests;
+
     public function __construct(
         private FavoriteProductService $favoriteProductService,
         private UserService $userService,
@@ -51,14 +37,15 @@ class FavorityController extends Controller
     /**
      * @OA\Get(
      *     path="/api/my-favorites",
+     *     operationId="getMyFavorites",
      *     summary="Listar favoritos do usuário autenticado",
      *     tags={"Meus Favoritos"},
      *     security={{"bearerAuth":{}}},
-     *     @OA\Response(...)
+     *     @OA\Response(response=200, description="Produtos favoritos listados com sucesso")
      * )
-     *
      * @OA\Get(
      *     path="/api/users/{user}/favorites",
+     *     operationId="getUserFavorites",
      *     summary="Listar favoritos de um usuário (admin)",
      *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
@@ -68,7 +55,7 @@ class FavorityController extends Controller
      *         required=true,
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(...)
+     *     @OA\Response(response=200, description="Produtos favoritos listados com sucesso")
      * )
      */
     public function index(Request $request, int $userId): JsonResponse
@@ -88,6 +75,7 @@ class FavorityController extends Controller
     /**
      * @OA\Post(
      *     path="/api/my-favorites",
+     *     operationId="addMyFavorite",
      *     summary="Adicionar produto aos favoritos do usuário autenticado",
      *     tags={"Meus Favoritos"},
      *     security={{"bearerAuth":{}}},
@@ -102,6 +90,7 @@ class FavorityController extends Controller
      * )
      * @OA\Post(
      *     path="/api/users/{user}/favorites",
+     *     operationId="addUserFavorite",
      *     summary="Adicionar produto aos favoritos de um usuário (admin)",
      *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
@@ -139,10 +128,10 @@ class FavorityController extends Controller
         );
     }
 
-
     /**
      * @OA\Delete(
      *     path="/api/my-favorites/{product}",
+     *     operationId="removeMyFavorite",
      *     summary="Remover produto dos favoritos do usuário autenticado",
      *     tags={"Meus Favoritos"},
      *     security={{"bearerAuth":{}}},
@@ -156,6 +145,7 @@ class FavorityController extends Controller
      * )
      * @OA\Delete(
      *     path="/api/users/{user}/favorites/{product}",
+     *     operationId="removeUserFavorite",
      *     summary="Remover produto dos favoritos de um usuário (admin)",
      *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
@@ -188,10 +178,10 @@ class FavorityController extends Controller
         );
     }
 
-
     /**
      * @OA\Get(
      *     path="/api/my-favorites/{product}/check",
+     *     operationId="checkMyFavorite",
      *     summary="Checar se produto está nos favoritos do usuário autenticado",
      *     tags={"Meus Favoritos"},
      *     security={{"bearerAuth":{}}},
@@ -205,6 +195,7 @@ class FavorityController extends Controller
      * )
      * @OA\Get(
      *     path="/api/users/{user}/favorites/{product}/check",
+     *     operationId="checkUserFavorite",
      *     summary="Checar se produto está nos favoritos de um usuário (admin)",
      *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
@@ -238,10 +229,10 @@ class FavorityController extends Controller
         ], 'Status do favorito verificado com sucesso');
     }
 
-
     /**
      * @OA\Get(
      *     path="/api/my-favorites/count",
+     *     operationId="countMyFavorites",
      *     summary="Contar produtos favoritos do usuário autenticado",
      *     tags={"Meus Favoritos"},
      *     security={{"bearerAuth":{}}},
@@ -249,6 +240,7 @@ class FavorityController extends Controller
      * )
      * @OA\Get(
      *     path="/api/users/{user}/favorites/count",
+     *     operationId="countUserFavorites",
      *     summary="Contar produtos favoritos de um usuário (admin)",
      *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
