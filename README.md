@@ -76,7 +76,11 @@ Rode as migrations:
 ```bash
 ./vendor/bin/sail artisan migrate --seed
 ```
+Gerar Documentação no Swagger:
 
+```bash
+./vendor/bin/sail artisan l5-swagger:generate 
+```
 ---
 
 ## 📚 Documentação da API

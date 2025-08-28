@@ -1,6 +1,5 @@
 FROM php:8.4-fpm-alpine
 
-# Pacotes do sistema
 RUN apk add --no-cache \
     bash \
     git \
@@ -18,29 +17,31 @@ RUN apk add --no-cache \
     postgresql-dev \
     supervisor
 
-# GD
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
- && docker-php-ext-install -j"$(nproc)" gd
-
-# Extensões PHP (sem comentários e sem espaços após a barra invertida)
-RUN docker-php-ext-install -j"$(nproc)" \
-    pdo_pgsql \
-    mbstring \
-    exif \
-    pcntl \
-    bcmath \
-    intl \
-    opcache
+RUN docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
+        --with-webp \
+ && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        mbstring \
+        exif \
+        pcntl \
+        bcmath \
+        intl \
+        gd \
+        opcache
 
 ENV TZ=America/Sao_Paulo
+
 WORKDIR /var/www/html
 
-# Copia o app
 COPY . .
 
-# Composer e deps da app no build
+
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
- && composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+ && php artisan config:cache \
+ && php artisan route:cache \
+ && php artisan view:cache
 
 
 CMD ["php", "-S", "0.0.0.0:9000", "-t", "public"]

@@ -9,7 +9,7 @@ echo "📦 Installing PHP dependencies with Composer (idempotent)..."
 composer install --no-dev --optimize-autoloader --no-interaction || true
 
 echo "🧼 Clearing and caching Laravel configuration..."
-cp -f deploy/.env.prod .env   # <- ajustado o caminho, se seu .env.prod está em deploy/
+cp -f deploy/.env.prod .env   
 php artisan key:generate --force
 php artisan jwt:secret --force
 php artisan config:clear
