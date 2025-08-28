@@ -1,5 +1,6 @@
 FROM php:8.4-fpm-alpine
 
+# Dependências do sistema e extensões PHP
 RUN apk add --no-cache \
     bash \
     git \
@@ -31,17 +32,17 @@ RUN docker-php-ext-configure gd \
         gd \
         opcache
 
+# Fuso horário
 ENV TZ=America/Sao_Paulo
 
+# Diretório de trabalho
 WORKDIR /var/www/html
 
+# Copia código-fonte
 COPY . .
 
+# Instala Composer (não roda artisan aqui)
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer \
- && php artisan config:cache \
- && php artisan route:cache \
- && php artisan view:cache
-
-
-CMD ["php", "-S", "0.0.0.0:9000", "-t", "public"]
+# O start.sh vai cuidar do resto (composer install, artisan, migrate, seed, etc.)
+CMD ["sh", "/usr/local/bin/start.sh"]
