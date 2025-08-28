@@ -17,9 +17,26 @@ use Illuminate\Http\Request;
 
 
 /**
- * @OA\Tag(
- *     name="Favoritos",
- *     description="Gerenciamento de produtos favoritos dos usuários"
+ * @OA\Get(
+ *     path="/api/my-favorites",
+ *     summary="Listar favoritos do usuário autenticado",
+ *     tags={"Meus Favoritos"},
+ *     security={{"bearerAuth":{}}},
+ *     @OA\Response(...)
+ * )
+ *
+ * @OA\Get(
+ *     path="/api/users/{user}/favorites",
+ *     summary="Listar favoritos de um usuário (admin)",
+ *     tags={"Favoritos de Usuário"},
+ *     security={{"bearerAuth":{}}},
+ *     @OA\Parameter(
+ *         name="user",
+ *         in="path",
+ *         required=true,
+ *         @OA\Schema(type="integer")
+ *     ),
+ *     @OA\Response(...)
  * )
  */
 class FavorityController extends Controller
@@ -33,25 +50,25 @@ class FavorityController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/api/my-favorites",
+     *     summary="Listar favoritos do usuário autenticado",
+     *     tags={"Meus Favoritos"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(...)
+     * )
+     *
+     * @OA\Get(
      *     path="/api/users/{user}/favorites",
-     *     summary="Listar produtos favoritos de um usuário",
-     *     tags={"Favoritos"},
+     *     summary="Listar favoritos de um usuário (admin)",
+     *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="user",
      *         in="path",
      *         required=true,
-     *         description="ID do usuário",
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Lista de favoritos retornada com sucesso"
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Não autorizado"
-     *     )
+     *     @OA\Response(...)
      * )
      */
     public function index(Request $request, int $userId): JsonResponse
@@ -70,15 +87,28 @@ class FavorityController extends Controller
 
     /**
      * @OA\Post(
+     *     path="/api/my-favorites",
+     *     summary="Adicionar produto aos favoritos do usuário autenticado",
+     *     tags={"Meus Favoritos"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"product_id"},
+     *             @OA\Property(property="product_id", type="integer", example=2)
+     *         )
+     *     ),
+     *     @OA\Response(response=201, description="Produto adicionado aos favoritos")
+     * )
+     * @OA\Post(
      *     path="/api/users/{user}/favorites",
-     *     summary="Adicionar produto aos favoritos do usuário",
-     *     tags={"Favoritos"},
+     *     summary="Adicionar produto aos favoritos de um usuário (admin)",
+     *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="user",
      *         in="path",
      *         required=true,
-     *         description="ID do usuário",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\RequestBody(
@@ -88,14 +118,7 @@ class FavorityController extends Controller
      *             @OA\Property(property="product_id", type="integer", example=2)
      *         )
      *     ),
-     *     @OA\Response(
-     *         response=201,
-     *         description="Produto adicionado aos favoritos"
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Não autorizado"
-     *     )
+     *     @OA\Response(response=201, description="Produto adicionado aos favoritos")
      * )
      */
     public function store(AddFavoriteRequest $request, $userId = null): JsonResponse
@@ -119,32 +142,36 @@ class FavorityController extends Controller
 
     /**
      * @OA\Delete(
+     *     path="/api/my-favorites/{product}",
+     *     summary="Remover produto dos favoritos do usuário autenticado",
+     *     tags={"Meus Favoritos"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="product",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Produto removido dos favoritos")
+     * )
+     * @OA\Delete(
      *     path="/api/users/{user}/favorites/{product}",
-     *     summary="Remover produto dos favoritos do usuário",
-     *     tags={"Favoritos"},
+     *     summary="Remover produto dos favoritos de um usuário (admin)",
+     *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="user",
      *         in="path",
      *         required=true,
-     *         description="ID do usuário",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Parameter(
      *         name="product",
      *         in="path",
      *         required=true,
-     *         description="ID do produto",
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Produto removido dos favoritos"
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Não autorizado"
-     *     )
+     *     @OA\Response(response=200, description="Produto removido dos favoritos")
      * )
      */
     public function destroy(int $userId, int $productId): JsonResponse
@@ -164,32 +191,36 @@ class FavorityController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/api/my-favorites/{product}/check",
+     *     summary="Checar se produto está nos favoritos do usuário autenticado",
+     *     tags={"Meus Favoritos"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="product",
+     *         in="path",
+     *         required=true,
+     *         @OA\Schema(type="integer")
+     *     ),
+     *     @OA\Response(response=200, description="Status do favorito retornado")
+     * )
+     * @OA\Get(
      *     path="/api/users/{user}/favorites/{product}/check",
-     *     summary="Checar se produto está nos favoritos do usuário",
-     *     tags={"Favoritos"},
+     *     summary="Checar se produto está nos favoritos de um usuário (admin)",
+     *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="user",
      *         in="path",
      *         required=true,
-     *         description="ID do usuário",
      *         @OA\Schema(type="integer")
      *     ),
      *     @OA\Parameter(
      *         name="product",
      *         in="path",
      *         required=true,
-     *         description="ID do produto",
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Status do favorito retornado"
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Não autorizado"
-     *     )
+     *     @OA\Response(response=200, description="Status do favorito retornado")
      * )
      */
     public function check(int $userId, int $productId): JsonResponse
@@ -210,25 +241,24 @@ class FavorityController extends Controller
 
     /**
      * @OA\Get(
+     *     path="/api/my-favorites/count",
+     *     summary="Contar produtos favoritos do usuário autenticado",
+     *     tags={"Meus Favoritos"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(response=200, description="Contagem de favoritos retornada")
+     * )
+     * @OA\Get(
      *     path="/api/users/{user}/favorites/count",
-     *     summary="Contar produtos favoritos do usuário",
-     *     tags={"Favoritos"},
+     *     summary="Contar produtos favoritos de um usuário (admin)",
+     *     tags={"Favoritos de Usuário"},
      *     security={{"bearerAuth":{}}},
      *     @OA\Parameter(
      *         name="user",
      *         in="path",
      *         required=true,
-     *         description="ID do usuário",
      *         @OA\Schema(type="integer")
      *     ),
-     *     @OA\Response(
-     *         response=200,
-     *         description="Contagem de favoritos retornada"
-     *     ),
-     *     @OA\Response(
-     *         response=401,
-     *         description="Não autorizado"
-     *     )
+     *     @OA\Response(response=200, description="Contagem de favoritos retornada")
      * )
      */
     public function count(int $userId): JsonResponse
