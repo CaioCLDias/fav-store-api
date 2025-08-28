@@ -1,6 +1,6 @@
 FROM php:8.4-fpm-alpine
 
-# Dependências do sistema e extensões PHP
+# Instala dependências do sistema
 RUN apk add --no-cache \
     bash \
     git \
@@ -18,12 +18,15 @@ RUN apk add --no-cache \
     postgresql-dev \
     supervisor
 
+# Configura e instala extensões do PHP (incluindo PostgreSQL)
 RUN docker-php-ext-configure gd \
         --with-freetype \
         --with-jpeg \
         --with-webp \
  && docker-php-ext-install -j$(nproc) \
         pdo_mysql \
+        pdo_pgsql \
+        pgsql \
         mbstring \
         exif \
         pcntl \
@@ -38,11 +41,11 @@ ENV TZ=America/Sao_Paulo
 # Diretório de trabalho
 WORKDIR /var/www/html
 
-# Copia código-fonte
+# Copia o código do projeto
 COPY . .
 
-# Instala Composer (não roda artisan aqui)
+# Instala Composer (não roda artisan aqui para evitar erro do vendor)
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
-# O start.sh vai cuidar do resto (composer install, artisan, migrate, seed, etc.)
+# O start.sh vai rodar composer install, artisan, migrations etc.
 CMD ["sh", "/usr/local/bin/start.sh"]
