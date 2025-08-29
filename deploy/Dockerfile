@@ -48,4 +48,4 @@ COPY . .
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
 
 # O start.sh vai rodar composer install, artisan, migrations etc.
-CMD ["sh", "/usr/local/bin/start.sh"]
+CMD ["php-fpm"]

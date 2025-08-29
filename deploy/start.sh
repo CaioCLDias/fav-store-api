@@ -33,4 +33,4 @@ php artisan l5-swagger:generate || true
 
 
 echo "✅ Startup complete. Launching PHP..."
-exec php -S 0.0.0.0:9000 -t public
+exec php-fpm
